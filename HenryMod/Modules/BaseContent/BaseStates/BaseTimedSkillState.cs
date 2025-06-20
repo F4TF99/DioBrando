@@ -1,7 +1,7 @@
 ﻿using EntityStates;
 using System;
 
-namespace HenryMod.Modules.BaseStates
+namespace DioMod.Modules.BaseStates
 {
     //see example skills below
     public abstract class BaseTimedSkillState : BaseSkillState
