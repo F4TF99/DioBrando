@@ -24,6 +24,12 @@ namespace DioMod.Survivors.Henry
         public static GameObject standGameObject;
         private static string standGameObjectName = "mdlStand";
 
+        public static GameObject standLeftHandPrefab;
+        private static string standLeftHandObjectName = "StandLeftArm";
+
+        public static GameObject standRightHandPrefab;
+        private static string standRightHandObjectName = "StandRightArm";
+
         private static AssetBundle _assetBundle;
 
         public static void Init(AssetBundle assetBundle)
@@ -77,6 +83,7 @@ namespace DioMod.Survivors.Henry
         {
             CreateBombProjectile();
             CreateKnifeProjectile();
+            CreateStandBarrageProjectiles();
             Content.AddProjectilePrefab(bombProjectilePrefab);
         }
 
@@ -88,7 +95,7 @@ namespace DioMod.Survivors.Henry
             ProjectileSimple simple = knifeProjectilePrefab.GetComponent<ProjectileSimple>();
             ProjectileOverlapAttack overlap = knifeProjectilePrefab.GetComponent<ProjectileOverlapAttack>();
 
-            simple.lifetime = 1f;
+            simple.lifetime = 0.25f;
 
             overlap.impactEffect = null;
             overlap.onServerHit = null;
@@ -153,6 +160,40 @@ namespace DioMod.Survivors.Henry
                 Log.Message($"DioAssets: GameObject {standGameObject.name} has successfully been loaded!");
             }
         }
+
+        private static void CreateStandBarrageProjectiles()
+        {
+            standLeftHandPrefab = Asset.CloneProjectilePrefab("FMJRamping", "StandLeftHandBarrageProjectile");
+
+            ProjectileDamage damage = standLeftHandPrefab.GetComponent<ProjectileDamage>();
+            ProjectileSimple simple = standLeftHandPrefab.GetComponent<ProjectileSimple>();
+            ProjectileOverlapAttack overlap = standLeftHandPrefab.GetComponent<ProjectileOverlapAttack>();
+
+            damage.damage = 1;
+            damage.damageType.damageSource = DamageSource.Secondary;
+
+            simple.lifetime = 0.1f;
+
+            overlap.impactEffect = null;
+            overlap.onServerHit = null;
+
+            ProjectileController standLeftHandController = standLeftHandPrefab.GetComponent<ProjectileController>();
+            standLeftHandController.startSound = "";
+            standLeftHandController.allowPrediction = false;
+
+            if (_assetBundle.LoadAsset<GameObject>(standLeftHandObjectName) != null)
+            {
+                Log.Message($"DioAssets: Stand Barrage Projectile found");
+                var handPrefab = _assetBundle.CreateProjectileGhostPrefab(standLeftHandObjectName);
+                handPrefab.transform.localScale = new Vector3(7f, 7f, 7f);
+                standLeftHandController.ghostPrefab = handPrefab;
+            }
+            else
+            {
+                Log.Error($"DioAssets: Stand Barrage Projectiles not found!");
+            }
+        }
         #endregion
     }
 }
+ 
