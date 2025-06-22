@@ -22,6 +22,8 @@ namespace DioMod.Survivors.Henry.SkillStates
         private StandLinkComponent standLinkComponent;
         private RoR2.CharacterModel characterModel;
 
+        private int initialInvisibilityCount;
+
         private Renderer standRenderer;
         private Renderer baseObjectRenderer;
 
@@ -33,16 +35,14 @@ namespace DioMod.Survivors.Henry.SkillStates
             base.OnEnter();
 
             standLinkComponent = base.gameObject.GetComponent<StandLinkComponent>();
-            //characterModel = base.gameObject.GetComponent<RoR2.CharacterModel>();
-            //characterModel.SetVisible(false);
+            Transform modelTransform = base.GetModelTransform();
+            characterModel = modelTransform.GetComponent<RoR2.CharacterModel>();
 
-            //standRenderer = standLinkComponent.standGameObject.GetComponent<Renderer>();
-            //baseObjectRenderer = base.gameObject.GetComponent<Renderer>();
-
-            //standRenderer.enabled = !standRenderer.enabled;
-            //baseObjectRenderer.enabled = !baseObjectRenderer.enabled;
-            //base.gameObject.SetActive(false);
-            //standLinkComponent.standGameObject.SetActive(false);
+            if (characterModel != null)
+            {
+                initialInvisibilityCount = characterModel.invisibilityCount;
+                characterModel.invisibilityCount = 0;
+            }
 
             if (isAuthority && inputBank && characterDirection)
             {
@@ -98,13 +98,11 @@ namespace DioMod.Survivors.Henry.SkillStates
             characterMotor.velocity = Vector3.zero;
             base.OnExit();
 
-            characterMotor.disableAirControlUntilCollision = false;
-            //base.gameObject.SetActive(true);
-            //standLinkComponent.standGameObject.gameObject.SetActive(true);
-
-            //standRenderer.enabled = !standRenderer.enabled;
-            //baseObjectRenderer.enabled = !baseObjectRenderer.enabled;
-            //characterModel.SetVisible(true);
+            if (characterModel != null)
+            {
+                characterMotor.disableAirControlUntilCollision = false;
+                characterModel.invisibilityCount = initialInvisibilityCount;
+            }
         }
 
         private void RecalculateBlinkSpeed()
