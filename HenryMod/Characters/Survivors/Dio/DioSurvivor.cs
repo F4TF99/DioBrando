@@ -288,7 +288,7 @@ namespace DioMod.Survivors.Henry
                 skillDescriptionToken = HENRY_PREFIX + "UTILITY_ROLL_DESCRIPTION",
                 skillIcon = assetBundle.LoadAsset<Sprite>("texUtilityIcon"),
 
-                activationState = new EntityStates.SerializableEntityStateType(typeof(Roll)),
+                activationState = new EntityStates.SerializableEntityStateType(typeof(Blink)),
                 activationStateMachineName = "Body",
                 interruptPriority = EntityStates.InterruptPriority.PrioritySkill,
 
