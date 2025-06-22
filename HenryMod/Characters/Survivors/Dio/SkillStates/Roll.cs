@@ -31,9 +31,9 @@ namespace DioMod.Survivors.Henry.SkillStates
             }
 
             Vector3 rhs = characterDirection ? characterDirection.forward : forwardDirection;
-            Vector3 rhs2 = Vector3.Cross(Vector3.up, rhs);
+            Vector3 rhs2 = Vector3.Cross(Vector3.up, rhs); // Cross calculates a vector perpendictular to the other vectors passed in
 
-            float num = Vector3.Dot(forwardDirection, rhs);
+            float num = Vector3.Dot(forwardDirection, rhs); // Dot checks to see how much 2 vectors go in the same direction
             float num2 = Vector3.Dot(forwardDirection, rhs2);
 
             RecalculateRollSpeed();
